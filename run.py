@@ -1,24 +1,30 @@
 from flask import Flask, request
+from datetime import datetime
 import urllib2
 import json
 
 app = Flask('bootcamp-app') 
 
-//Not sure if I need these next two lines here, or if I need to integrate the below the @app.route
-req = urllib2.Request("http://api.open-notify.org/iss-now.json")
-response = urllib2.urlopen(req)
-
 @app.route('/iss', methods=['GET', 'POST'])
 def iss():
-
-    body = request.values['Body']
-    response = requests.get('http://api.openweathermap.org/data/2.5/weather')
+    
+    req = urllib2.Request("http://api.open-notify.org/iss-now.json")
+    response = urllib2.urlopen(req)
     
     obj = json.loads(response.read())
 
-print obj['timestamp']
-print obj['iss_position']['latitude'], obj['data']['iss_position']['latitude']
+    print obj['timestamp']
+    print obj['iss_position']['latitude'], obj['iss_position']['longitude']
 
-    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>' +str(timestamp) + '</Message></Response>'
+    timestamp = datetime.utcfromtimestamp(obj['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
+    iss_position = obj['iss_position']
+    latitude = obj['iss_position']['latitude']
+    longitude = obj['iss_position']['longitude']
     
-app.run(debug=True, host='0.0.0.0', port=8080)
+    googs = 'https://www.google.com/maps/search/?api=1&query=' + str(latitude) + ',' + str(longitude) 
+    print(googs)
+    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Time of Ping (UTC): ' + str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude\n' + '</Message></Response>'
+#    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>' +'Time of Ping ' +str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude' + '</Message></Response>'
+#    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>'+ googs + '</Message></Response>'
+    
+app.run(debug=True, host='0.0.0.0', port=8080) 
