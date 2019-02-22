@@ -1,0 +1,27 @@
+from flask import Flask, request
+import json
+import requests
+
+app = Flask('bootcamp-app') 
+
+@app.route('/sms', methods=['GET', 'POST'])
+def sms():
+    return """<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+    <Message>Welcome to bootcamp</Message>
+    </Response>"""
+
+    
+@app.route('/weather', methods=['GET', 'POST'])
+def weather():
+    body = request.values['Body']
+    response = requests.get('http://api.openweathermap.org/data/2.5/weather', params={
+        'appid': 'a25a927adcbff623857629d081330f36',
+        'q': body
+    })
+        
+    data = json.loads(response.content)
+    temp = data['main']['temp'] - 273.15
+    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>' +str(temp) + '</Message></Response>'
+    
+app.run(debug=True, host='0.0.0.0', port=8080)
