@@ -20,11 +20,11 @@ def iss():
     iss_position = obj['iss_position']
     latitude = obj['iss_position']['latitude']
     longitude = obj['iss_position']['longitude']
-    
-    googs = 'https://www.google.com/maps/search/?api=1&query=' + str(latitude) + ',' + str(longitude) 
+    googs = 'http://www.google.com/maps/place/' + str(latitude) + ',' + str(longitude) 
+
     print(googs)
-    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Time of Ping (UTC): ' + str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude\n' + '</Message></Response>'
-#    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>' +'Time of Ping ' +str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude' + '</Message></Response>'
+    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>Time of Ping (UTC): ' + str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude ' '\n' + googs + '</Message></Response>'
+#    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>' +'Time of Ping ' +str(timestamp) + '\n' +'Position of the ISS' +'\n' +str(latitude) +' Latitude' + '\n' +str(longitude) +' Longitude' + googs + '</Message></Response>'
 #    return '<?xml version="1.0" encoding="UTF-8"?><Response><Message>'+ googs + '</Message></Response>'
     
 app.run(debug=True, host='0.0.0.0', port=8080) 
